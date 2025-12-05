@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
+
 
 #define the url of the webpage
 url = 'https://books.toscrape.com/'
