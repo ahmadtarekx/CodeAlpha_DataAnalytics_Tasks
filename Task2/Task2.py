@@ -2,60 +2,60 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-#load data
+# Load data
 books = pd.read_csv('E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task1/books.csv')
 
-#Data Cleaning
+# Data Cleaning
 
-#know the colomn types
+# Know the column types
 print(books.dtypes)
 
-#update colomn headers to standard format
-new_names = ['Genre', 'Name', 'price', 'status', 'upc', 'type', 'price_excl_tax', 'price incl tax', 'tax', 'review num']
+# Update column headers to standard format
+new_names = ['Genre', 'Name', 'price', 'status', 'upc', 'type', 'price_excl_tax', 'price_incl_tax', 'tax', 'review_num']
 standard_names = [name.title().replace(' ', '_') for name in new_names]
-def rename_columns(df, new_names):
 
+def rename_columns(df, new_names):
+    """Rename columns to standardized format"""
     # Check if the number of new column names matches the existing columns
     if len(df.columns) != len(new_names):
         print("\n--- ERROR: COLUMN COUNT MISMATCH ---")
         print(f"File has {len(df.columns)} columns.")
         print(f"You provided {len(new_names)} new column names.")
-        print("Please ensure the 'NEW_COLUMN_NAMES' list matches the exact column count in your CSV.")
-        return df # Return original df on error to avoid crashing
+        print("Please ensure the 'new_names' list matches the exact column count in your CSV.")
+        return df  # Return original df on error to avoid crashing
     
     df.columns = standard_names
-    print(f"Columns renamed successfully.")
+    print(f"\nColumns renamed successfully.")
     return df
 
-rename_columns(books, new_names)
+# IMPORTANT: Assign the result back to books
+books = rename_columns(books, new_names)
 
-#convert data types of colomns to appropriate types
+# Convert data types of columns to appropriate types
 def convert_column_types(df):
-
-    print("\n--- converting column types ---")
+    """Convert columns to appropriate data types"""
+    print("\n--- Converting column types ---")
     
     # 1. String Conversions
-    str_cols = ['Genre', 'Name', 'status', 'upc', 'type']
+    str_cols = ['Genre', 'Name', 'Status', 'Upc', 'Type']
     for col in str_cols:
         if col in df.columns:
             df[col] = df[col].astype(str).str.strip()
     print("Converted string columns.")
 
-    # 2. Float Conversions (Handling currency symbols like '£')
-    float_cols = ['price', 'price_excl_tax', 'price incl tax', 'tax']
+    # 2. Float Conversions (Handling ANY currency symbols)
+    float_cols = ['Price', 'Price_Excl_Tax', 'Price_Incl_Tax', 'Tax']
     for col in float_cols:
         if col in df.columns:
-            # Remove '£' and ',' before converting to float
-            # errors='coerce' turns non-convertible values into NaN
+            # Use regex to replace anything that is NOT a digit or a dot with empty string
             df[col] = pd.to_numeric(
-                df[col].astype(str).str.replace('£', '').str.replace(',', ''), 
+                df[col].astype(str).str.replace(r'[^\d.]', '', regex=True), 
                 errors='coerce'
             )
-    print("Converted float columns (currency symbols removed).")
+    print("Converted float columns (currency symbols removed via regex).")
 
     # 3. Integer Conversion
-    int_col = 'review num'
+    int_col = 'Review_Num'
     if int_col in df.columns:
         # Convert to numeric first (coercing errors), fill NaNs with 0, then cast to int
         df[int_col] = pd.to_numeric(df[int_col], errors='coerce').fillna(0).astype(int)
@@ -63,12 +63,14 @@ def convert_column_types(df):
 
     return df
 
-convert_column_types(books)
+# IMPORTANT: Assign the result back to books
+books = convert_column_types(books)
 
-#check for missing values in critical colomns and handle them(if in critical colomns remove the rows with null values)
-exempt_columns = ['Upc','Type','Review_Num'] 
-def handle_null_values(df, exempt_columns):
+# Check for missing values in critical columns and handle them
+exempt_columns = ['Upc', 'Type', 'Review_Num'] 
 
+def handle_null_values(df, exempt_columns=None):
+    """Remove rows with null values in non-exempt columns"""
     if exempt_columns is None:
         exempt_columns = []
         
@@ -84,7 +86,6 @@ def handle_null_values(df, exempt_columns):
     print(null_counts[null_counts > 0])
     
     # 2. Determine which columns to check for dropping rows
-    # We want to check ALL columns EXCEPT the ones in the exempt list
     cols_to_check = [col for col in df.columns if col not in exempt_columns]
     
     if not cols_to_check:
@@ -102,9 +103,43 @@ def handle_null_values(df, exempt_columns):
     
     return df_cleaned
 
-handle_null_values(books, exempt_columns)
+# IMPORTANT: Assign the result back to books
+books = handle_null_values(books, exempt_columns)
 
+# Remove rows where Name is 'next' (from web scraping artifacts)
+def remove_next_rows(df):
+    """Remove rows where 'Name' column contains 'next'"""
+    print("\n--- Filtering 'next' rows ---")
+    if 'Name' not in df.columns:
+        print("Warning: Column 'Name' not found.")
+        return df
 
+    initial_rows = len(df)
+    # Filter out rows where Name is 'next'
+    df = df[df['Name'].astype(str).str.strip().str.lower() != 'next']
+    
+    rows_removed = initial_rows - len(df)
+    print(f"Removed {rows_removed} rows where Name was 'next'.")
+    return df
 
-#clean Data Preview
-print(books)
+# IMPORTANT: Assign the result back to books
+books = remove_next_rows(books)
+
+# Save cleaned data to new csv file
+def save_data(df, output_path):
+    """Save dataframe to CSV file"""
+    try:
+        df.to_csv(output_path, index=False)
+        print(f"\nSuccessfully saved cleaned data to '{output_path}'.")
+        print(f"Final dataset shape: {df.shape}")
+    except Exception as e:
+        print(f"Error saving data: {e}")
+
+save_data(books, 'E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task2/cleaned_books.csv')
+
+# Load and display cleaned data
+print("\n--- Cleaned Data Preview ---")
+cleaned_books = pd.read_csv('E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task2/cleaned_books.csv')
+print(cleaned_books.head())
+print(f"\nDataset info:")
+print(cleaned_books.info())
