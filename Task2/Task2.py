@@ -66,6 +66,35 @@ def convert_column_types(df):
 # IMPORTANT: Assign the result back to books
 books = convert_column_types(books)
 
+
+#after consideration i found that converting Status to Amount_Available would be more useful
+#so i created a function to do that and display only the integer values
+def convert_status_to_amount(df):
+    """Convert 'Status' column to 'Amount_Available' with integer values"""
+    print("\n--- Converting Status to Amount_Available ---")
+    
+    if 'Status' not in df.columns:
+        print("Warning: Column 'Status' not found.")
+        return df
+    
+    # Extract numbers from status column
+    # This will extract any digits from strings like "In stock (19 available)"
+    df['Amount_Available'] = df['Status'].astype(str).str.extract(r'(\d+)', expand=False)
+    
+    # Convert to integer, filling any NaN values with 0
+    df['Amount_Available'] = pd.to_numeric(df['Amount_Available'], errors='coerce').fillna(0).astype(int)
+    
+    # Drop the original Status column
+    df = df.drop('Status', axis=1)
+    
+    print(f"Successfully converted Status to Amount_Available.")
+    print(f"Sample values: {df['Amount_Available'].head().tolist()}")
+    
+    return df
+
+
+books = convert_status_to_amount(books)
+
 # Check for missing values in critical columns and handle them
 exempt_columns = ['Upc', 'Type', 'Review_Num'] 
 
