@@ -34,24 +34,29 @@ Output: The raw, uncleaned data was exported directly from the ParseHub platform
 
 **TASK 2 (EDA Questions & Objectives):**
 
-The primary goal of this analysis is to uncover trends in the US corporate landscape by analyzing revenue, profitability, and workforce efficiency.
+1. Ask Meaningful QuestionsPricing Trends: Is there a significant price difference between genres? 
+For example, are "Travel" books consistently more expensive than "Mystery" books?
 
---1. Efficiency Analysis--
-Question: Which industry sectors generate the highest revenue per employee?
-Goal: To move beyond raw revenue numbers and identify which industries are the most labor-efficient versus labor-intensive.
+Inventory Efficiency: Which genre has the highest Amount_Available compared to its average price?
+Does a high stock level correlate with a lower price to encourage sales?
+ 
+ 2. Explore the Data Structure Redundancy Check: Does the Type column contain any value other than "Books"?
+  If it is a constant value, can we remove it to simplify the dataset?
 
---2. Growth Dynamics--
-Question: Is there a correlation between a company's current size (Revenue) and its growth rate?
-Goal:To test the hypothesis that "megacaps" grow slower than smaller competitors, or if the largest players are accelerating their dominance.
+  Variable Consistency: Are the columns Price, Price_Excl, and Price_Incl mathematically identical in every row? If so, why does the system generate three separate columns for the same value?
+  
+  3. Identify Trends, Patterns & Anomalies 
+  Category Domination: Which genre represents the largest portion of the total inventory value (Price $\times$ Amount_Available)?
 
---3. Geographic Distribution--
-Question: How does the distribution of corporate headquarters differ between Public and Private companies?
-Goal: To visualize state-level clusters and see if private giants (like Cargill) are located in different regions than public tech/finance giants.
+  Outlier Detection: Are there any "Luxury" books that have a price significantly higher than the average for their genre (e.g., a Travel book priced at £200)?
 
---4. Profitability vs. Volume--
-Question: Which companies rank high in top-line Revenue but fail to appear in the top Profit rankings?
-Goal: To distinguish between high-volume/low-margin businesses (like Retail) and high-margin powerhouses (like Tech).
+  4. Test Hypotheses & Validate AssumptionsThe Tax Hypothesis: Can we validate that this dataset represents a tax-free region? 
+  We can test this by checking if the Tax column is exactly $0.00$ for all records.
 
---5. Sector Dominance--
-Question: What percentage of the total top corporate profits is driven solely by the Technology sector?
-Goal: To quantify the impact of Big Tech on the overall US corporate profit pool compared to traditional industries like Energy or Finance.
+  UPC Uniqueness: Is every Upc (Universal Product Code) unique? 
+  We assume each row is a unique book edition, but we must validate that no duplicates exist in this identifier column.
+  
+  5. Detect Potential Data IssuesInformation Gaps: Why is the Review_Num column empty (or zero) in the preview? 
+  Does this mean the books haven't been reviewed yet, or is the data connection to the reviews broken?
+  
+  Precision Issues: Do any books have an Amount_Available of zero? If so, should these be excluded from pricing analysis to avoid skewing "active" market trends?

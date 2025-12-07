@@ -164,11 +164,11 @@ def save_data(df, output_path):
     except Exception as e:
         print(f"Error saving data: {e}")
 
-save_data(books, 'E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task2/cleaned_books.csv')
+save_data(books, 'E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task1/cleaned_books.csv')
 
 # Load and display cleaned data
 print("\n--- Cleaned Data Preview ---")
-cleaned_books = pd.read_csv('E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task2/cleaned_books.csv')
+cleaned_books = pd.read_csv('E:/CodeAlpha_DataAnalytics_tasks/CodeAlpha_DataAnalytics_Tasks/Task1/cleaned_books.csv')
 print(cleaned_books)
 print(f"\nDataset info:")
 print(cleaned_books.info())
