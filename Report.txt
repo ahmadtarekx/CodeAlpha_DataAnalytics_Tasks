@@ -1,0 +1,103 @@
+PROJECT REPORT: EXPLORATORY DATA ANALYSIS (EDA) - BOOKS DATASET
+DATE: December 8, 2025 AUTHOR: [Your Name] SUBJECT: Analysis of Book Inventory, Pricing, and Stock Distribution
+
+SECTION 1: DATA STRUCTURE & QUALITY ASSESSMENT
+Before analysis, the dataset was examined for structure and integrity.
+
+DATA DIMENSIONS
+
+The dataset consists of book records including Genre, Price, UPC, and Stock levels.
+
+Total Rows: 190
+
+Total Columns: 10
+
+DATA CLEANING & ISSUES DETECTED
+
+Redundancy: The columns 'Price', 'Price_Excl', and 'Price_Incl' were found to be identical. Analysis proceeded using only the 'Price' column.
+
+Zero Variance: The 'Tax' column contained only 0.00 values, confirming this is a tax-free dataset (or tax is not recorded). This column was excluded to reduce noise.
+
+Missing Information: The 'Review_Num' column was found to be empty/zero for all records, meaning customer sentiment analysis was not possible at this stage.
+
+Useless Features: The 'Type' column contained only the value "Books" and was removed.
+
+Cleaned the 'Price' Colomn to remove the $ sign 
+
+Renamed the 'Status' colomn to 'Amount_Available' and shown only the amount in storage
+
+SECTION 2: STRATEGIC BUSINESS QUESTIONS (EDA)
+We analyzed four key business questions to understand inventory health.
+
+Q1: PRICING STRATEGY
+
+Question: Is there a significant price difference between genres?
+
+Finding: The most expensive genre on average is Travel Books, while the most affordable is Religion.
+
+Q2: INVENTORY EFFICIENCY
+
+Question: Is there a relationship between Price and Stock levels?
+
+Finding: We analyzed if expensive books are stocked in lower quantities. The correlation analysis suggests [No correlation].
+
+Q3: MARKET CONCENTRATION (INVENTORY BALANCE)
+
+Question: Is the inventory heavily skewed toward specific genres?
+
+Finding: The inventory is [SKEWED]. The top 5 genres make up [55.2 %] of the total stock.
+
+Q4: CAPITAL ALLOCATION
+
+Question: Which books represent the highest tied-up capital?
+
+Finding: High-value assets were identified by multiplying Price x Amount_Available. The single most valuable asset in stock is "Tipping The Velvet".
+
+SECTION 3: STATISTICAL INSIGHTS & HYPOTHESIS TESTING
+We tested statistical assumptions to validate the dataset.
+
+OUTLIER DETECTION
+
+Using box plots, we identified price outliers in the Romance category. These represent "Luxury" editions significantly above the average market price.
+
+UPC UNIQUENESS
+
+Hypothesis: Every book has a unique Universal Product Code (UPC).
+
+Validation: The UPC column was checked for duplicates. [No duplicates were found]
+
+SECTION 4: DATA VISUALIZATION PORTFOLIO
+The following visualizations were created to communicate insights to stakeholders:
+
+VISUAL 1: MARKET PRICE DISTRIBUTION (HISTOGRAM)
+
+Purpose: To show the shape of book pricing in the market.
+
+Insight: The majority of books fall in the price range of [20-50].
+
+VISUAL 2: INVENTORY COMPOSITION (BAR CHART)
+
+Purpose: To identify the top 10 genres by volume.
+
+Insight: [Historical Fiction - Sequential Art - Romance - Fiction - Childrens] are dominant categories, suggesting these are the primary store focus.
+
+VISUAL 3: PRICING STRATEGY BY GENRE (BOX PLOT)
+
+Purpose: To compare price ranges and variability across genres.
+
+Insight: This chart highlights which genres have stable pricing versus those with high variance.
+
+VISUAL 4: INVENTORY RISK HEATMAP (SCATTER PLOT)
+
+Purpose: To visualize the relationship between Price and Stock.
+
+Insight: Helps identify high-risk items (High Price + High Stock) that may need discounting if they do not sell.
+
+SECTION 5: CONCLUSION & RECOMMENDATIONS
+Based on the analysis:
+
+The dataset required cleaning of redundant tax and price columns.
+
+Pricing strategies vary significantly by genre.
+
+RECOMMENDATION: Focus future restocking efforts on high-performing genres and consider discounting high-stock/high-price outliers identified in the Scatter Plot to free up capital.
